@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VETS VAN — Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-mark">V</div><div><strong>VETS VAN</strong><span>ADMIN</span></div></div>
+    <nav>
+      <button class="nav-item active" data-page="dashboard"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></button>
+      <button class="nav-item" data-page="bookings"><i class="fa-regular fa-calendar-check"></i><span>Bookings</span><b class="badge">3</b></button>
+      <div class="nav-label">MANAGEMENT</div>
+      <button class="nav-item" data-page="services"><i class="fa-solid fa-stethoscope"></i><span>Services</span></button>
+      <button class="nav-item" data-page="experts"><i class="fa-solid fa-user-doctor"></i><span>Experts</span></button>
+      <button class="nav-item" data-page="partners"><i class="fa-solid fa-handshake"></i><span>Partnerships</span></button>
+      <div class="nav-label">WEBSITE</div>
+      <button class="nav-item" data-page="content"><i class="fa-solid fa-pen-to-square"></i><span>Website Content</span></button>
+      <button class="nav-item" data-page="media"><i class="fa-regular fa-images"></i><span>Media Library</span></button>
+      <button class="nav-item" data-page="messages"><i class="fa-regular fa-message"></i><span>Messages</span><b class="badge">2</b></button>
+      <div class="nav-label">SYSTEM</div>
+      <button class="nav-item" data-page="seo"><i class="fa-solid fa-globe"></i><span>SEO & Languages</span></button>
+      <button class="nav-item" data-page="settings"><i class="fa-solid fa-sliders"></i><span>Settings</span></button>
+      <button class="nav-item" data-page="admins"><i class="fa-solid fa-users-gear"></i><span>Admin Users</span></button>
+    </nav>
+    <div class="sidebar-bottom"><a href="../" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Website</a><button id="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="icon-btn mobile-menu" id="mobileMenu"><i class="fa-solid fa-bars"></i></button>
+      <div class="top-title"><span id="pageKicker">OVERVIEW</span><h1 id="pageTitle">Dashboard</h1></div>
+      <div class="top-actions">
+        <button class="icon-btn notification" id="notifications"><i class="fa-regular fa-bell"></i><span></span></button>
+        <div class="profile"><div class="avatar">M</div><div><strong>Admin</strong><small>Super Admin</small></div><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+    </header>
+
+    <section class="content" id="app">
+      <div class="page active" id="page-dashboard">
+        <div class="welcome"><div><p class="eyebrow">WELCOME BACK</p><h2>Good afternoon, Admin.</h2><p>Here is what's happening with VETS VAN today.</p></div><button class="primary" data-page="bookings"><i class="fa-solid fa-plus"></i> New Booking</button></div>
+        <div class="stats-grid">
+          <div class="stat"><div class="stat-icon purple"><i class="fa-regular fa-calendar-check"></i></div><span>Total Bookings</span><strong>128</strong><small class="up">↑ 12.5% <em>vs last month</em></small></div>
+          <div class="stat"><div class="stat-icon orange"><i class="fa-regular fa-clock"></i></div><span>Pending</span><strong>12</strong><small class="up">↑ 3 <em>since yesterday</em></small></div>
+          <div class="stat"><div class="stat-icon green"><i class="fa-solid fa-check"></i></div><span>Completed</span><strong>96</strong><small class="up">↑ 8.2% <em>vs last month</em></small></div>
+          <div class="stat"><div class="stat-icon blue"><i class="fa-regular fa-envelope"></i></div><span>Messages</span><strong>7</strong><small><em>2 unread</em></small></div>
+        </div>
+        <div class="grid-two">
+          <div class="panel"><div class="panel-head"><div><p class="eyebrow">ACTIVITY</p><h3>Bookings Overview</h3></div><select><option>Last 7 days</option><option>Last 30 days</option></select></div><div class="chart"><div class="chart-grid"></div><div class="bars"><i style="height:42%"></i><i style="height:64%"></i><i style="height:48%"></i><i style="height:78%"></i><i style="height:58%"></i><i style="height:92%"></i><i style="height:70%"></i></div><div class="chart-labels"><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span></div></div></div>
+          <div class="panel"><div class="panel-head"><div><p class="eyebrow">RECENT</p><h3>Latest Bookings</h3></div><button class="text-btn" data-page="bookings">View all</button></div><div class="booking-list"><div class="booking-row"><div class="pet">A</div><div><strong>Ahmed Alqahtani</strong><small>Vaccinations · Today, 6:00 PM</small></div><span class="status pending">Pending</span></div><div class="booking-row"><div class="pet">L</div><div><strong>Laura Smith</strong><small>Wellness Exam · Today, 7:30 PM</small></div><span class="status confirmed">Confirmed</span></div><div class="booking-row"><div class="pet">O</div><div><strong>Omar Hassan</strong><small>Dental Care · Tomorrow, 4:00 PM</small></div><span class="status confirmed">Confirmed</span></div><div class="booking-row"><div class="pet">S</div><div><strong>Sarah Ali</strong><small>Lab Tests · Tomorrow, 8:00 PM</small></div><span class="status completed">Completed</span></div></div></div>
+        </div>
+      </div>
+
+      <div class="page" id="page-bookings"><div class="page-head"><div><p class="eyebrow">MANAGEMENT</p><h2>Bookings</h2><p>Manage appointments, customer details and booking status.</p></div><button class="primary"><i class="fa-solid fa-plus"></i> New Booking</button></div><div class="toolbar"><div class="search"><i class="fa-solid fa-magnifying-glass"></i><input placeholder="Search customer, pet or booking ID..."></div><select><option>All statuses</option><option>Pending</option><option>Confirmed</option><option>Completed</option><option>Cancelled</option></select><select><option>All services</option><option>Vaccinations</option><option>Wellness Exams</option><option>Dental Care</option></select><button class="icon-btn"><i class="fa-solid fa-filter"></i></button></div><div class="panel table-panel"><table><thead><tr><th>Booking</th><th>Customer</th><th>Pet</th><th>Service</th><th>Date & Time</th><th>Status</th><th></th></tr></thead><tbody><tr><td><strong>#VV-0128</strong></td><td>Ahmed Alqahtani</td><td>Max · Dog</td><td>Vaccinations</td><td>Aug 19 · 6:00 PM</td><td><span class="status pending">Pending</span></td><td><button class="dots">•••</button></td></tr><tr><td><strong>#VV-0127</strong></td><td>Laura Smith</td><td>Luna · Cat</td><td>Wellness Exam</td><td>Aug 19 · 7:30 PM</td><td><span class="status confirmed">Confirmed</span></td><td><button class="dots">•••</button></td></tr><tr><td><strong>#VV-0126</strong></td><td>Omar Hassan</td><td>Oscar · Dog</td><td>Dental Care</td><td>Aug 20 · 4:00 PM</td><td><span class="status confirmed">Confirmed</span></td><td><button class="dots">•••</button></td></tr><tr><td><strong>#VV-0125</strong></td><td>Sarah Ali</td><td>Simba · Cat</td><td>Lab Tests</td><td>Aug 20 · 8:00 PM</td><td><span class="status completed">Completed</span></td><td><button class="dots">•••</button></td></tr></tbody></table></div></div>
+
+      <div class="page" id="page-services"><div class="page-head"><div><p class="eyebrow">MANAGEMENT</p><h2>Services</h2><p>Manage the services shown on VETS VAN.</p></div><button class="primary"><i class="fa-solid fa-plus"></i> Add Service</button></div><div class="cards-grid"><div class="service-card"><div class="service-image">💉</div><div><span class="live">ACTIVE</span><h3>Vaccinations</h3><p>Essential vaccines for a healthy and protected pet.</p><div class="card-actions"><button>Edit</button><button>Duplicate</button><button class="danger">Delete</button></div></div></div><div class="service-card"><div class="service-image">🩺</div><div><span class="live">ACTIVE</span><h3>Wellness Exams</h3><p>Complete preventive health assessments at home.</p><div class="card-actions"><button>Edit</button><button>Duplicate</button><button class="danger">Delete</button></div></div></div><div class="service-card"><div class="service-image">🧪</div><div><span class="live">ACTIVE</span><h3>Diagnostic Lab Tests</h3><p>Fast and convenient diagnostic testing.</p><div class="card-actions"><button>Edit</button><button>Duplicate</button><button class="danger">Delete</button></div></div></div></div></div>
+
+      <div class="page" id="page-experts"><div class="page-head"><div><p class="eyebrow">MANAGEMENT</p><h2>Experts</h2><p>Manage veterinarians and expert profiles.</p></div><button class="primary"><i class="fa-solid fa-plus"></i> Add Expert</button></div><div class="cards-grid"><div class="expert-card"><div class="expert-avatar">Dr</div><div><h3>Dr. Abd al Aziz</h3><p>Surgery & Care</p><small>8 years experience</small><div class="card-actions"><button>Edit</button><button>Hide</button><button class="danger">Delete</button></div></div></div></div></div>
+
+      <div class="page" id="page-partners"><div class="page-head"><div><p class="eyebrow">MANAGEMENT</p><h2>Partnerships</h2><p>Manage clinics and strategic partners.</p></div><button class="primary"><i class="fa-solid fa-plus"></i> Add Partner</button></div><div class="cards-grid"><div class="partner-card"><div class="logo-placeholder">PAWS</div><h3>Dr. PAWS Clinics</h3><span class="live">ACTIVE</span><div class="card-actions"><button>Edit</button><button class="danger">Delete</button></div></div><div class="partner-card"><div class="logo-placeholder">EV</div><h3>Elite Veterinary Hospitals</h3><span class="live">ACTIVE</span><div class="card-actions"><button>Edit</button><button class="danger">Delete</button></div></div></div></div>
+
+      <div class="page" id="page-content"><div class="page-head"><div><p class="eyebrow">WEBSITE</p><h2>Website Content</h2><p>Edit website copy without touching the code.</p></div><div class="lang-tabs"><button class="active">English</button><button>العربية</button></div></div><div class="content-editor panel"><label>Hero Title</label><input value="Premium Veterinary Care, At Your Door."><label>Hero Description</label><textarea>Expert veterinary care delivered to your home by a dedicated mobile team.</textarea><label>Primary Button</label><input value="Book Now"><label>Secondary Button</label><input value="Our Services"><div class="save-row"><button class="primary">Save Changes</button><span>Last saved: Not connected to database yet</span></div></div></div>
+
+      <div class="page" id="page-media"><div class="page-head"><div><p class="eyebrow">WEBSITE</p><h2>Media Library</h2><p>Upload and organize images used across the website.</p></div><button class="primary"><i class="fa-solid fa-upload"></i> Upload Media</button></div><div class="media-grid"><div class="media-item"><div class="media-thumb">VAN</div><span>VetsVan.png</span><small>Hero</small></div><div class="media-item"><div class="media-thumb">ICON</div><span>Icon.png</span><small>General</small></div><div class="upload-box"><i class="fa-solid fa-cloud-arrow-up"></i><strong>Upload files</strong><small>JPG, PNG, WEBP, SVG</small></div></div></div>
+
+      <div class="page" id="page-messages"><div class="page-head"><div><p class="eyebrow">INBOX</p><h2>Contact Messages</h2><p>Manage enquiries submitted through the website.</p></div></div><div class="panel table-panel"><table><thead><tr><th>Sender</th><th>Subject</th><th>Message</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody><tr><td><strong>Mohammed Ali</strong><small>05xxxxxxxx</small></td><td>General enquiry</td><td>I'd like to know more about...</td><td>Today, 11:40 AM</td><td><span class="status pending">Unread</span></td><td><button class="dots">•••</button></td></tr><tr><td><strong>Rana Ahmed</strong><small>05xxxxxxxx</small></td><td>Booking question</td><td>Can I book a visit for...</td><td>Yesterday</td><td><span class="status confirmed">Read</span></td><td><button class="dots">•••</button></td></tr></tbody></table></div></div>
+
+      <div class="page" id="page-seo"><div class="page-head"><div><p class="eyebrow">SYSTEM</p><h2>SEO & Languages</h2><p>Control search metadata and language settings.</p></div></div><div class="panel form-panel"><div class="lang-tabs"><button class="active">English</button><button>العربية</button></div><label>Meta Title</label><input value="VETS VAN | Premium Mobile Veterinary Care"><label>Meta Description</label><textarea>Premium mobile veterinary care delivered to your door in Riyadh.</textarea><label>OG Image</label><input placeholder="Select media..."><div class="save-row"><button class="primary">Save SEO Settings</button></div></div></div>
+
+      <div class="page" id="page-settings"><div class="page-head"><div><p class="eyebrow">SYSTEM</p><h2>Settings</h2><p>Manage contact, booking and social settings.</p></div></div><div class="settings-grid"><div class="panel form-panel"><h3>Contact Information</h3><label>Phone</label><input value="+966 920011626"><label>Email</label><input value="Info@vetsvan.com"><label>Location</label><input value="Riyadh, Saudi Arabia"><button class="primary">Save Contact Settings</button></div><div class="panel form-panel"><h3>Booking Settings</h3><label>Booking status</label><select><option>Enabled</option><option>Disabled</option></select><label>Minimum notice</label><select><option>2 hours</option><option>6 hours</option><option>24 hours</option></select><label>Maximum bookings per slot</label><input type="number" value="1"><button class="primary">Save Booking Settings</button></div></div></div>
+
+      <div class="page" id="page-admins"><div class="page-head"><div><p class="eyebrow">SYSTEM</p><h2>Admin Users</h2><p>Manage dashboard access and permissions.</p></div><button class="primary"><i class="fa-solid fa-plus"></i> Add Admin</button></div><div class="panel table-panel"><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody><tr><td><strong>Admin</strong></td><td>admin@vetsvan.com</td><td>Super Admin</td><td><span class="status completed">Active</span></td><td><button class="dots">•••</button></td></tr></tbody></table></div></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
