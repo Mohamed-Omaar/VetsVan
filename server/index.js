@@ -15,7 +15,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'change-this-secret-in-render';
 const pool = process.env.DATABASE_URL ? new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } }) : null;
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '..')));
+app.use((req,res,next)=>req.path.startsWith('/admin')?next():express.static(path.join(__dirname,'..'))(req,res,next));
 async function query(text, params = []) { if (!pool) throw new Error('DATABASE_URL is not configured'); return pool.query(text, params); }
 async function bootstrap() {
   if (!pool) return;
@@ -27,15 +27,11 @@ async function bootstrap() {
   CREATE TABLE IF NOT EXISTS site_content (id SERIAL PRIMARY KEY, content_key TEXT UNIQUE NOT NULL, value_en TEXT NOT NULL DEFAULT '', value_ar TEXT NOT NULL DEFAULT '', updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW());
   CREATE TABLE IF NOT EXISTS site_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL DEFAULT '', updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW());`);
   const admin = await query('SELECT id FROM admins LIMIT 1');
-  if (!admin.rows.length && process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
-    const hash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 12);
-    await query('INSERT INTO admins(name,email,password_hash,role) VALUES($1,$2,$3,$4)', [process.env.ADMIN_NAME || 'Admin', process.env.ADMIN_EMAIL.toLowerCase(), hash, 'super_admin']);
-  }
+  if (!admin.rows.length && process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) { const hash=await bcrypt.hash(process.env.ADMIN_PASSWORD,12); await query('INSERT INTO admins(name,email,password_hash,role) VALUES($1,$2,$3,$4)',[process.env.ADMIN_NAME||'Admin',process.env.ADMIN_EMAIL.toLowerCase(),hash,'super_admin']); }
 }
 function auth(req,res,next){const token=(req.headers.authorization||'').replace(/^Bearer\s+/i,'');try{req.user=jwt.verify(token,JWT_SECRET);next();}catch{res.status(401).json({error:'Unauthorized'});}}
 async function audit(req,action,resource,details={}){if(pool&&req.user)await query('INSERT INTO audit_logs(admin_id,action,resource,details) VALUES($1,$2,$3,$4)',[req.user.id,action,resource,JSON.stringify(details)]);}
 const protect=p=>[auth,requirePermission(p)];
-
 app.post('/api/auth/login',async(req,res)=>{try{const{email,password}=req.body;if(!email||!password)return res.status(400).json({error:'Email and password are required'});const r=await query('SELECT * FROM admins WHERE LOWER(email)=LOWER($1) AND active=true LIMIT 1',[email]);if(!r.rows.length||!(await bcrypt.compare(password,r.rows[0].password_hash)))return res.status(401).json({error:'Invalid credentials'});const a=r.rows[0];const token=jwt.sign({id:a.id,email:a.email,name:a.name,role:normalizeRole(a.role)},JWT_SECRET,{expiresIn:'12h'});res.json({token,user:{id:a.id,name:a.name,email:a.email,role:normalizeRole(a.role)}});}catch(e){res.status(500).json({error:e.message});}});
 app.get('/api/health',(_req,res)=>res.json({ok:true,database:!!pool}));
 app.get('/api/admin/me',auth,(req,res)=>res.json({user:req.user,permissions:ROLES[normalizeRole(req.user.role)]||[]}));
@@ -59,7 +55,6 @@ app.post('/api/admin/users',...protect('__super_admin__'),async(req,res)=>{try{c
 app.patch('/api/admin/users/:id',...protect('__super_admin__'),async(req,res)=>{try{if(String(req.params.id)===String(req.user.id)&&req.body.active===false)return res.status(400).json({error:'You cannot disable your own account'});const{name,email,role,active,password}=req.body,normalized=role?normalizeRole(role):null;if(normalized&&!ROLES[normalized])return res.status(400).json({error:'Invalid role'});const hash=password?await bcrypt.hash(password,12):null,r=await query('UPDATE admins SET name=COALESCE($1,name),email=COALESCE(LOWER($2),email),role=COALESCE($3,role),active=COALESCE($4,active),password_hash=COALESCE($5,password_hash),updated_at=NOW() WHERE id=$6 RETURNING id,name,email,role,active,created_at,updated_at',[name,email,normalized,active,hash,req.params.id]);await audit(req,'update','admin',{id:req.params.id,role:normalized});res.json(r.rows[0]);}catch(e){res.status(400).json({error:e.code==='23505'?'Email already exists':e.message});}});
 app.delete('/api/admin/users/:id',...protect('__super_admin__'),async(req,res)=>{try{if(String(req.params.id)===String(req.user.id))return res.status(400).json({error:'You cannot delete your own account'});await query('DELETE FROM admins WHERE id=$1',[req.params.id]);await audit(req,'delete','admin',{id:req.params.id});res.status(204).end();}catch(e){res.status(500).json({error:e.message});}});
 app.get('/api/admin/audit-logs',...protect('__super_admin__'),async(_req,res)=>{try{res.json((await query('SELECT l.*,a.name AS admin_name,a.email AS admin_email FROM audit_logs l LEFT JOIN admins a ON a.id=l.admin_id ORDER BY l.created_at DESC LIMIT 200')).rows);}catch(e){res.status(500).json({error:e.message});}});
-
 app.get('/admin/login',(_req,res)=>res.sendFile(path.join(__dirname,'..','admin','login.html')));
-app.get('/admin',async(_req,res)=>{try{const file=await fs.readFile(path.join(__dirname,'..','admin','index.html'),'utf8');res.type('html').send(file.replace('</body>','<script src="/admin/rbac-client.js"></script></body>'));}catch(e){res.status(500).send('Admin dashboard unavailable');}});
+app.get(['/admin','/admin/'],async(_req,res)=>{try{const file=await fs.readFile(path.join(__dirname,'..','admin','index.html'),'utf8');res.type('html').send(file.replace('</body>','<script src="/admin/rbac-client.js"></script></body>'));}catch(e){res.status(500).send('Admin dashboard unavailable');}});
 bootstrap().then(()=>app.listen(PORT,'0.0.0.0',()=>console.log(`VETS VAN server listening on ${PORT}`))).catch(e=>{console.error(e);process.exit(1);});
