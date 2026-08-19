@@ -1,6 +1,14 @@
 /* Fix for the dynamically-created Website Customization page. */
 (function () {
   function bind() {
+    /* Dynamic pages need the same visibility behavior as the static pages. */
+    if (!document.getElementById('vetsvan-page-visibility-fix')) {
+      const style = document.createElement('style');
+      style.id = 'vetsvan-page-visibility-fix';
+      style.textContent = '.page:not(.active){display:none !important;} .page.active{display:block !important;}';
+      document.head.appendChild(style);
+    }
+
     const button = document.querySelector('.nav-item[data-page="customization"]');
     const page = document.getElementById('page-customization');
     if (!button || !page || button.dataset.customFixBound === '1') return;
