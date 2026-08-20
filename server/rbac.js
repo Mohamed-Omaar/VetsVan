@@ -1,5 +1,5 @@
 export const ROLES = {
-  super_admin: ['*'],
+  super_admin: ['*','users:manage'],
   admin: ['dashboard:read','bookings:read','bookings:write','services:read','services:write','experts:read','experts:write','partnerships:read','partnerships:write','content:read','content:write','media:read','media:write','messages:read','messages:write','seo:read','seo:write','settings:read','settings:write'],
   content_manager: ['dashboard:read','services:read','services:write','experts:read','experts:write','partnerships:read','partnerships:write','content:read','content:write','media:read','media:write','seo:read','seo:write','customization:read','customization:write'],
   booking_manager: ['dashboard:read','bookings:read','bookings:write','messages:read','messages:write'],
@@ -11,7 +11,9 @@ export function normalizeRole(role = '') {
 }
 
 export function hasPermission(role, permission) {
-  const list = ROLES[normalizeRole(role)] || [];
+  const normalized = normalizeRole(role);
+  if (permission === '__super_admin__') return normalized === 'super_admin';
+  const list = ROLES[normalized] || [];
   return list.includes('*') || list.includes(permission);
 }
 
